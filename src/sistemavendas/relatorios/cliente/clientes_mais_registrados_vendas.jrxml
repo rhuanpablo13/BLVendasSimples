@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clientes_mais_registrados_vendas" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FBFDFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Dataset1" uuid="5e475a96-dc74-4989-b00c-61cad28d657d">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+		<queryString language="SQL">
+			<![CDATA[SELECT COUNT(NOME) QTD_COMPRAS, 
+	CODIGO_VENDA,	
+	DATE_FORMAT(DATA_VENDA, '%d/%m/%Y') DATA_VENDA,
+	CONCAT('R$ ', FORMAT(SUB_TOTAL,2, 'de_DE')) AS SUB_TOTAL,
+	CONCAT('R$ ', FORMAT(VALOR_TOTAL,2, 'de_DE')) AS VALOR_TOTAL,
+	CODIGO_CLIENTE,
+	NOME,
+	ENDERECO,
+	BAIRRO
+FROM (
+SELECT
+	 V.CODIGO AS CODIGO_VENDA,
+		V.DATA_VENDA AS DATA_VENDA,
+		V.SUB_TOTAL AS SUB_TOTAL,
+		V.VALOR_TOTAL AS VALOR_TOTAL,
+		C.CODIGO AS CODIGO_CLIENTE,
+		C.NOME AS NOME,
+		C.ENDERECO AS ENDERECO,
+		C.BAIRRO AS BAIRRO
+FROM VENDA V, CLIENTE C
+WHERE V.ID_CLIENTE = C.ID	
+) A
+GROUP BY NOME
+ORDER BY QTD_COMPRAS DESC]]>
+		</queryString>
+		<field name="QTD_COMPRAS" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="QTD_COMPRAS"/>
+		</field>
+		<field name="CODIGO_VENDA" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="CODIGO_VENDA"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="venda"/>
+		</field>
+		<field name="DATA_VENDA" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="DATA_VENDA"/>
+		</field>
+		<field name="SUB_TOTAL" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="SUB_TOTAL"/>
+		</field>
+		<field name="VALOR_TOTAL" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="VALOR_TOTAL"/>
+		</field>
+		<field name="CODIGO_CLIENTE" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="CODIGO_CLIENTE"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+		<field name="NOME" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="NOME"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+		<field name="ENDERECO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ENDERECO"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+		<field name="BAIRRO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="BAIRRO"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[SELECT COUNT(NOME) as QTD_COMPRAS, 
+	CODIGO_VENDA,	
+	DATE_FORMAT(DATA_VENDA, '%d/%m/%Y') as DATA_VENDA,
+	CONCAT('R$ ', FORMAT(SUB_TOTAL,2, 'de_DE')) as SUB_TOTAL ,
+	CONCAT('R$ ', FORMAT(VALOR_TOTAL,2, 'de_DE')) as VALOR_TOTAL ,
+	CODIGO_CLIENTE,
+	NOME,
+	ENDERECO,
+	BAIRRO
+FROM (
+SELECT
+	 V.CODIGO AS CODIGO_VENDA,
+		V.DATA_VENDA AS DATA_VENDA,
+		V.SUB_TOTAL AS SUB_TOTAL,
+		V.VALOR_TOTAL AS VALOR_TOTAL,
+		C.CODIGO AS CODIGO_CLIENTE,
+		C.NOME AS NOME,
+		C.ENDERECO AS ENDERECO,
+		C.BAIRRO AS BAIRRO
+FROM VENDA V, CLIENTE C
+WHERE V.ID_CLIENTE = C.ID	
+) A
+GROUP BY NOME
+ORDER BY QTD_COMPRAS DESC]]>
+	</queryString>
+	<field name="QTD_COMPRAS" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="QTD_COMPRAS"/>
+	</field>
+	<field name="CODIGO_VENDA" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="CODIGO_VENDA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="venda"/>
+	</field>
+	<field name="DATA_VENDA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DATA_VENDA"/>
+	</field>
+	<field name="SUB_TOTAL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="SUB_TOTAL"/>
+	</field>
+	<field name="VALOR_TOTAL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VALOR_TOTAL"/>
+	</field>
+	<field name="CODIGO_CLIENTE" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="CODIGO_CLIENTE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="NOME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="ENDERECO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ENDERECO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="BAIRRO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="BAIRRO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="126" splitType="Stretch">
+			<image>
+				<reportElement x="677" y="0" width="125" height="102" uuid="651ccc4b-e999-40fe-bcbf-1f25bcfc98af"/>
+				<imageExpression><![CDATA["person-sale.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="676" height="66" backcolor="#3498DB" uuid="d8d9e644-3a32-491d-97cb-a277aff17133"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="0" width="290" height="66" uuid="27d8f6ee-f0a9-44f6-a160-1763c3b00f30"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top">
+						<font fontName="Calibri" size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de Clientes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="290" y="37" width="380" height="29" forecolor="#FFFFFF" uuid="cfa21334-0634-4605-9ea7-aca4981f67e4"/>
+					<textElement textAlignment="Left">
+						<font fontName="Calibri Light" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de Clientes por Quantidade de Vendas]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="676" height="32" forecolor="#000000" backcolor="#2980B9" uuid="b0c895f6-6dbd-477d-9858-9ad66af087e1"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="496" y="12" width="174" height="20" forecolor="#FFFFFF" uuid="a33fce3b-20c1-4696-873a-fe134d1e7d88"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="220" splitType="Stretch">
+			<componentElement>
+				<reportElement x="2" y="20" width="800" height="140" uuid="b8b51b09-4c74-4677-ac5e-ba31e1ec8a8b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1" uuid="6268800b-19e2-4525-98d3-040baa8734e2">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="40" uuid="5f8a0761-bdc0-43e3-8d46-0869a4482051">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="30" uuid="962a9d98-ae6b-41c4-b74e-63dc8baf5483"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Qtd. Vendas]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="30" uuid="0300ed3c-c596-489f-b2a3-15aee10fc338"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{QTD_COMPRAS}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="40" uuid="e38c5401-b07f-44c3-b7a9-d6a6efbbc757">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="30" uuid="a7c2cdb2-0e8f-443b-896e-2cd081bd00fe"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Cd. Venda]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="30" uuid="21cfc05b-9207-4dc0-b0f9-617202f03e7a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CODIGO_VENDA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="e4c29a07-8d65-4400-9f33-7a62d692ae04">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" uuid="e11a95d7-65ad-4c7d-9597-96e4368b7a53"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Data Venda]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="30" uuid="ab1999d8-f1ab-4ea2-891a-42ea309980cb"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{DATA_VENDA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="d0d46eb9-47c5-4104-b167-da06ee882140">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="30" uuid="3185c2a9-b422-44c1-978b-242c40d03200"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Sub Total]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="30" uuid="dcc48d31-6d6a-4b4f-a691-0ca813f1aa73"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SUB_TOTAL}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="db154c3f-8451-4e7e-952e-4427fd430369">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="30" uuid="4c9a84a7-6d74-4d6d-b74b-451baeff0cb0"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="30" uuid="9d8a4e44-bc73-4c2f-95d8-5c37f2c7d5c7"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{VALOR_TOTAL}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="40" uuid="8be40858-bda6-4c2e-b1dd-74f062d6be9a">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="30" uuid="66252934-80a0-4878-a145-924ab004798f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Cd. Cliente]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="30" uuid="623342a4-28d9-445e-a872-793071e81210"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CODIGO_CLIENTE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="180" uuid="e7303797-5bf5-4957-9d93-0d38f1af8f3e">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="180" height="30" uuid="a642ada6-fe4e-46ec-95e7-c8f6320cc04a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nome]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="180" height="30" uuid="d1d6b7fe-7372-4731-b5cf-1b3dba0c608d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{NOME}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="130" uuid="6eb33da3-0869-4665-ae91-7c8bfea94bd6">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="130" height="30" uuid="b7c25322-4abf-4271-9fde-1f3e1caaed84"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Endereço]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="130" height="30" uuid="ea05419a-c6ca-4367-bba9-7886e75b41fd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ENDERECO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="140" uuid="6b75efea-3bd1-4a07-8f7b-1634c2a33505">
+						<jr:tableHeader style="Table_TH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="140" height="30" uuid="2d57675d-8d88-4c4b-a602-e73f9a57fa95"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Bairro]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="140" height="30" uuid="fde5148b-349c-41ed-988e-4021a94bcd0b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Calibri Light" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{BAIRRO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#2980B9" uuid="ffb10ec8-0371-4545-8eaa-96d62ad3cec0"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="b5521ea6-5f36-4864-856f-58d0bcd011f2"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="e625ea3c-1741-4cfe-81cf-fbbdd00162c8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Calibri" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de "]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="0c9f7e91-d3f5-47f9-82b7-0b2b3a43a5d6"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

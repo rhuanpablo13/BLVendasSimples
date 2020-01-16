@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clientes_por_idade_grafico" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a3fc8290-41eb-49fd-acfb-8b76ada1a0fd">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<subDataset name="Dataset_clientes_idade" uuid="982a47f4-a2af-4e9a-a429-cf445a5febda">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+	COUNT(*) qtd,
+	YEAR(CURDATE()) - YEAR(dt_nascimento) - ( DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(dt_nascimento, '%m%d')) AS diff_years
+FROM cliente
+GROUP BY diff_years;]]>
+		</queryString>
+		<field name="qtd" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="qtd"/>
+		</field>
+		<field name="diff_years" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="diff_years"/>
+		</field>
+	</subDataset>
+	<subDataset name="Dataset_clientes_regiao" uuid="2ab4ba8e-864e-4362-8c09-f75ab5ff814b">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+	COUNT(*) qtd2, 
+	cidade 
+FROM cliente
+GROUP BY cidade]]>
+		</queryString>
+		<field name="qtd2" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="qtd2"/>
+		</field>
+		<field name="cidade" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="cidade"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+	COUNT(*) qtd,
+	YEAR(CURDATE()) - YEAR(dt_nascimento) - ( DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(dt_nascimento, '%m%d')) AS diff_years
+FROM cliente
+GROUP BY diff_years]]>
+	</queryString>
+	<field name="qtd" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="qtd"/>
+	</field>
+	<field name="diff_years" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="diff_years"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="802" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="440" height="66" backcolor="#3498DB" uuid="ecd708a9-eea5-41e1-9858-503d4541d709"/>
+				<staticText>
+					<reportElement x="0" y="0" width="200" height="66" forecolor="#FFFFFF" uuid="2769be08-e80a-41cc-a10e-3b22f184744f"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top">
+						<font fontName="Calibri" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de Clientes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="200" y="37" width="210" height="29" forecolor="#FFFFFF" uuid="c8fe8136-84a4-4c35-818a-41a60467a622"/>
+					<textElement textAlignment="Left">
+						<font fontName="Calibri Light" size="13" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de clientes por idade e região]]></text>
+				</staticText>
+			</frame>
+			<image>
+				<reportElement x="460" y="0" width="91" height="82" uuid="38d4020a-4a7c-4a08-bcb0-38abd3329c87"/>
+				<imageExpression><![CDATA["C:\\Users\\rhuan\\JaspersoftWorkspace\\RelatoriosVendas\\clientes\\cliente-localizacao-aniversario.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="77" y="140" width="206" height="30" uuid="117148a7-5dff-4260-abe0-18fcf6d09174"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<text><![CDATA[Quantidade de clientes por idade]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="170" width="350" height="250" uuid="77a9f5ea-6816-424d-a5bd-6bdd0cc95aef">
+						<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+					</reportElement>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset maxCount="20">
+					<dataset>
+						<datasetRun subDataset="Dataset_clientes_idade" uuid="452a7162-10fb-46d2-8230-2f0a0c0f6ec0">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{diff_years}]]></keyExpression>
+					<valueExpression><![CDATA[$F{qtd}]]></valueExpression>
+					<labelExpression><![CDATA[new String($F{qtd} + " clientes ")]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<staticText>
+				<reportElement x="140" y="420" width="80" height="20" uuid="255409b7-fd1c-44bf-8cb1-c4f0107a0b3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<text><![CDATA[Idades
+]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="520" width="350" height="252" uuid="366683d1-481e-4e8e-89fd-08461139f003">
+						<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+					</reportElement>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset maxCount="20">
+					<dataset>
+						<datasetRun subDataset="Dataset_clientes_regiao" uuid="429f80d8-4671-4fa2-b18c-14c152127e7b">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{cidade}]]></keyExpression>
+					<valueExpression><![CDATA[$F{qtd2}]]></valueExpression>
+					<labelExpression><![CDATA[new String($F{cidade} + "("+ $F{qtd2} + ")")]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<staticText>
+				<reportElement x="77" y="490" width="206" height="30" uuid="d1b8f62c-0863-435e-983a-8802ecf896ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<text><![CDATA[Quantidade de clientes por cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="780" width="65" height="20" uuid="2cbec020-92f6-42cb-b811-450e46b8bbee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<text><![CDATA[Cidades]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="440" height="26" forecolor="#000000" backcolor="#2980B9" uuid="acfc0d48-e1c0-4278-a045-0cc8dfc1bcd0"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="236" y="6" width="174" height="20" forecolor="#FFFFFF" uuid="ae69b65a-2358-4b88-876a-5ef1e80f6df2"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+</jasperReport>

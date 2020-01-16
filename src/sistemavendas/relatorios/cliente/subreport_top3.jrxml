@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_top3" pageWidth="270" pageHeight="150" whenNoDataType="BlankPage" columnWidth="230" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="dc309fd5-03ce-4fbd-866f-452755a71bac">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+	id_cliente,
+	sum(total_pago) pago,
+	FORMAT(sum(total_pago),2, 'de_DE') AS pago_format,
+	nome,
+	YEAR(CURDATE()) - YEAR(cliente.dt_nascimento) - ( DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(cliente.dt_nascimento, '%m%d')) AS idade
+FROM 
+	venda,
+	cliente
+WHERE venda.id_cliente = cliente.id
+GROUP BY id_cliente
+ORDER BY pago desc
+LIMIT 3;]]>
+	</queryString>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="idade" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="idade"/>
+	</field>
+	<field name="pago_format" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="pago_format"/>
+	</field>
+	<group name="nome">
+		<groupExpression><![CDATA[$F{nome}]]></groupExpression>
+	</group>
+	<group name="idade">
+		<groupExpression><![CDATA[$F{idade}]]></groupExpression>
+	</group>
+	<group name="pago_format">
+		<groupExpression><![CDATA[$F{pago_format}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="130" height="20" uuid="e000703c-172b-4a09-bfaf-0f4472cef7e8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f3fa5d79-ff47-4ed7-8908-43dd6f416189"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="0" width="50" height="20" uuid="cf1b8d42-553f-4fd1-bc8c-cbf0dc1073b4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="01c9d0ce-28f7-46da-aa29-4099c1201a4a"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Idade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="50" height="20" uuid="df6a6193-d39d-4f52-a2af-7cee1eb59b28">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86cbb9df-ece5-42c9-8e5a-2d216c65075b"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor
+]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="130" height="20" uuid="5cacf072-313d-4a01-a314-83af02ea30b0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f3fa5d79-ff47-4ed7-8908-43dd6f416189"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="0" width="50" height="20" uuid="557bf46f-af20-4d3c-b6de-7e7e5d32d576">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="01c9d0ce-28f7-46da-aa29-4099c1201a4a"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="50" height="20" uuid="6ce3a7f8-685c-4fe4-b9c5-3ba4ba57ca91">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86cbb9df-ece5-42c9-8e5a-2d216c65075b"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pago_format}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

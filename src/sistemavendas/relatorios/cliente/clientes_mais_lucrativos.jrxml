@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clientes_mais_lucrativos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3e5c2e56-cb50-4378-b97c-ee5c88762362">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FBFDFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Dataset" uuid="4958462e-a998-4503-8912-c27d7957437c">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+	sum(total_pago) pago,
+	FORMAT(sum(total_pago),2, 'de_DE') AS pago_format,
+	nome,
+	YEAR(CURDATE()) - YEAR(cliente.dt_nascimento) - ( DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(cliente.dt_nascimento, '%m%d')) AS idade
+FROM 
+	venda,
+	cliente
+WHERE venda.id_cliente = cliente.id
+GROUP BY id_cliente
+ORDER BY pago desc]]>
+		</queryString>
+		<field name="pago" class="java.lang.Double">
+			<property name="com.jaspersoft.studio.field.label" value="pago"/>
+		</field>
+		<field name="pago_format" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="pago_format"/>
+		</field>
+		<field name="nome" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="nome"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+		</field>
+		<field name="idade" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.label" value="idade"/>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT 
+	FORMAT(sum(total_pago),2, 'de_DE') AS pago,
+	nome,
+	YEAR(CURDATE()) - YEAR(cliente.dt_nascimento) - ( DATE_FORMAT(CURDATE(), '%m%d') < DATE_FORMAT(cliente.dt_nascimento, '%m%d')) AS idade
+FROM 
+	venda,
+	cliente
+WHERE venda.id_cliente = cliente.id
+GROUP BY idade
+ORDER BY pago desc]]>
+	</queryString>
+	<field name="pago" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="pago"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente"/>
+	</field>
+	<field name="idade" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="idade"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="802" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="440" height="66" backcolor="#3498DB" uuid="09b8e276-0832-48e6-b9ee-242bc3ca14a0"/>
+				<staticText>
+					<reportElement x="0" y="0" width="200" height="66" forecolor="#FFFFFF" uuid="9d5fca80-3c2d-42fa-8ed3-40d3b6a7601b"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top">
+						<font fontName="Calibri" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de Clientes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="200" y="37" width="210" height="29" forecolor="#FFFFFF" uuid="8a9f608d-9771-4e8b-b643-bcb3ce14f9fc"/>
+					<textElement textAlignment="Right">
+						<font fontName="Calibri Light" size="11" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de clientes lucrativos  por idade e região]]></text>
+				</staticText>
+			</frame>
+			<image>
+				<reportElement x="460" y="0" width="91" height="82" uuid="28402dd6-5657-43d9-91cd-48e38124392f"/>
+				<imageExpression><![CDATA["cliente-lucrativo.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="440" height="26" forecolor="#000000" backcolor="#2980B9" uuid="2f72bff5-d064-4b3c-aea3-ff332270dfa6"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="236" y="6" width="174" height="20" forecolor="#FFFFFF" uuid="99d704ff-9aa8-4be5-8f54-cd8b54b27c9e"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="180" width="280" height="250" uuid="714aedb3-a9a3-4c82-8e3a-850bd0937277"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="Dataset" uuid="906d6a6d-0f66-489e-b085-5cc482ef9191">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{idade}]]></keyExpression>
+					<valueExpression><![CDATA[$F{idade}]]></valueExpression>
+					<labelExpression><![CDATA[$F{pago_format}]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<staticText>
+				<reportElement x="37" y="150" width="206" height="30" uuid="d20ae2b2-df9e-4605-afef-49570d9bf844"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<text><![CDATA[Quantidade de clientes por idade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="160" width="50" height="20" uuid="12edb03b-0eb4-49ca-8aaa-7b682b42c238"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[Top 3]]></text>
+			</staticText>
+			<image>
+				<reportElement x="400" y="180" width="49" height="52" uuid="a3a9bfa3-8b7f-4688-8dc5-eb95b67ebc6a"/>
+				<imageExpression><![CDATA["taca.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+</jasperReport>
